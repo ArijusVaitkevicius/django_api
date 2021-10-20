@@ -28,7 +28,7 @@ class Song(models.Model):
 
 class AlbumReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    album_id = models.ForeignKey(Album, on_delete=models.CASCADE)
+    album_id = models.ForeignKey(Album, on_delete=models.CASCADE, related_name='reviews')
     content = models.CharField(max_length=500)
 
     SCORE_CHOICES = (

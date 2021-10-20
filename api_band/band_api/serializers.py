@@ -9,9 +9,15 @@ class BandSerializer(serializers.ModelSerializer):
 
 
 class AlbumSerializer(serializers.ModelSerializer):
+    review_count = serializers.SerializerMethodField()
+    reviews = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Album
-        fields = ['id', 'name', 'band_id']
+        fields = ['id', 'name', 'band_id', 'review_count', 'reviews']
+
+    def get_review_count(self, obj):
+        return AlbumReview.objects.filter(album_id=obj).count()
 
 
 class SongSerializer(serializers.ModelSerializer):
@@ -23,6 +29,7 @@ class SongSerializer(serializers.ModelSerializer):
 class AlbumReviewSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     user_id = serializers.ReadOnlyField(source='user.id')
+    album_id = serializers.ReadOnlyField(source='album.id')
 
     class Meta:
         model = AlbumReview
